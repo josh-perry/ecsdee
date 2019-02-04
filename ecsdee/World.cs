@@ -34,6 +34,7 @@ namespace ecsdee
         public void RemoveEntity(Entity entity)
         {
             Entities.Remove(entity);
+            UpdateFilterEntityCaches(entity);
         }
 
         /// <summary>
