@@ -9,7 +9,7 @@ namespace ecsdee
         /// <summary>
         /// The entity's list of components.
         /// </summary>
-        public Dictionary<Type, IComponent> Components = new Dictionary<Type, IComponent>();
+        private readonly Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
         /// <summary>
         /// The world the entity belongs to.
@@ -48,12 +48,12 @@ namespace ecsdee
         /// <returns>The IComponent</returns>
         public IComponent GetComponent(Type componentType)
         {
-            if(!Components.ContainsKey(componentType))
+            if (!_components.ContainsKey(componentType))
             {
                 return null;
             }
 
-            return Components[componentType];
+            return _components[componentType];
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace ecsdee
                 throw new ComponentAlreadyExistsException(component, this);
             }
 
-            Components[component.GetType()] = component;
+            _components[component.GetType()] = component;
 
             _world.UpdateFilterEntityCaches(this);
         }
@@ -95,8 +95,8 @@ namespace ecsdee
                 throw new ComponentDoesntExistException(componentType, this);
             }
 
-            var component = GetComponent(componentType);
-            Components.Remove(componentType);
+            GetComponent(componentType);
+            _components.Remove(componentType);
 
             _world.UpdateFilterEntityCaches(this);
         }

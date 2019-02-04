@@ -4,7 +4,7 @@ namespace ecsdee
 {
     public class Filter
     {
-        private Type[] _matchTypes;
+        private readonly Type[] _matchTypes;
 
         public Filter(Type[] matchTypes)
         {
