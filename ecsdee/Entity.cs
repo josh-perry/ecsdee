@@ -7,6 +7,11 @@ namespace ecsdee
     public class Entity
     {
         /// <summary>
+        /// Public getter for _components.
+        /// </summary>
+        public Dictionary<Type, IComponent> Components => _components;
+
+        /// <summary>
         /// The entity's list of components.
         /// </summary>
         private readonly Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
