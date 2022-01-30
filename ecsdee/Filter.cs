@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ecsdee.Exceptions;
 
 namespace ecsdee
 {
@@ -6,9 +9,41 @@ namespace ecsdee
     {
         private readonly Type[] _matchTypes;
 
-        public Filter(Type[] matchTypes)
+        public Filter(params Type[] matchTypes)
         {
             _matchTypes = matchTypes;
+            ValidateTypes();
+        }
+
+        /// <summary>
+        /// Checks all match types to ensure that each of them implements
+        /// IComponent.
+        ///
+        /// Throws an exception with a list of invalid Types.
+        /// </summary>
+        /// <exception cref="InvalidComponentsException"></exception>
+        private void ValidateTypes()
+        {
+            var invalidTypes = new List<Type>();
+
+            foreach (var type in _matchTypes)
+            {
+                var interfaces = type.GetInterfaces();
+                var component = interfaces.FirstOrDefault(x => x == typeof(IComponent));
+                var valid = component != null;
+
+                if (valid)
+                {
+                    continue;
+                }
+
+                invalidTypes.Add(type);
+            }
+
+            if (invalidTypes.Count > 0)
+            {
+                throw new InvalidComponentsException(invalidTypes);
+            }
         }
 
         /// <summary>
